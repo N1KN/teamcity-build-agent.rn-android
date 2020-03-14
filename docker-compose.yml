@@ -1,0 +1,19 @@
+version: "2"
+services:
+    teamcity-server:
+        image: jetbrains/teamcity-server
+        ports:
+            - "80:8111"
+        volumes:
+            - ./data:/data/teamcity_server/datadir
+            - ./log:/opt/teamcity/logs
+    teamcity-android-agent:
+        devices:
+            - "/dev/bus/usb:/dev/bus/usb"
+        image: n1kn/teamcity-build-agent.rn-android
+        volumes:
+            - ./android-build-agent/conf:/data/teamcity_agent/conf
+            - ./android-build-agent/work:/opt/buildagent/work
+        environment:
+            - SERVER_URL=http://teamcity-server:8111
+            - AGENT_NAME=rn_android_build_agent
